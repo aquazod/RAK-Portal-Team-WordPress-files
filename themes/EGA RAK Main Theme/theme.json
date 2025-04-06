@@ -1,0 +1,24 @@
+{
+	"$schema": "https://schemas.wp.org/wp/6.5/theme.json",
+	"version": "2",
+	"settings": {
+		"typography": {
+			"fontFamilies": [
+				{
+					"fontFamily": "simonson",
+					"slug": "simonson",
+					"fontFace": [
+						{
+							"fontFamily": "simonson",
+							"fontStretch": "",
+							"fontStyle": "normal",
+							"fontWeight": "400",
+							"src": "https://courtsrak.wpenginepowered.com/wp-content/uploads/useanyfont/8371Simonson.woff2"
+						}
+					],
+					"isUAF": true
+				}
+			]
+		}
+	}
+}
