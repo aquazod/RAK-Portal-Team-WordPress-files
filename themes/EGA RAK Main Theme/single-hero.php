@@ -1,4 +1,8 @@
 <?php
+if (is_singular('hero')) {
+    get_header();
+}
+
 $hero_title = get_the_title();
 $hero_subtitle = get_field('sub_title');
 $image_or_video = get_field('video_or_image'); // Radio button value
@@ -39,3 +43,9 @@ if ($expiry_date && $expiry_date < $today) {
         <?php endif; ?>
     </div>
 </section>
+
+<?php
+if (is_singular('hero')) {
+    get_footer();
+}
+?>
