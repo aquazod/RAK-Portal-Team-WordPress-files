@@ -1,0 +1,34 @@
+.acf-tooltip-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-icon, .tooltip-text {
+    cursor: pointer;
+    position: relative;
+}
+
+.tooltip-content {
+    visibility: hidden;
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    padding: 8px 12px;
+    border-radius: 4px;
+    position: absolute;
+    z-index: 999;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip-icon:hover .tooltip-content,
+.tooltip-text:hover .tooltip-content,
+.tooltip-icon:focus .tooltip-content,
+.tooltip-text:focus .tooltip-content {
+    visibility: visible;
+    opacity: 1;
+}
