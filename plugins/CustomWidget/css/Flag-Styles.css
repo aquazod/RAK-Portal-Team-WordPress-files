@@ -1,0 +1,41 @@
+.flag-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.flag {
+    display: inline-block;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    margin: 10px auto;
+    font-weight: bold;
+}
+
+.flag img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Background colors based on flag type */
+.flag-Critical {
+    background-color: #ff4d4d; /* Red */
+    color: white;
+}
+
+.flag-High {
+    background-color: #ff9900; /* Orange */
+    color: white;
+}
+
+.flag-Medium {
+    background-color: #ffd700; /* Yellow */
+    color: black;
+}
+
+.flag-Low {
+    background-color: #4caf50; /* Green */
+    color: white;
+}

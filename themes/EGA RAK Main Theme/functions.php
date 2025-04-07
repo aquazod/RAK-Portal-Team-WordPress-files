@@ -1549,8 +1549,6 @@ function disable_new_posts_for_acf_cpt($args, $post_type) {
 }
 add_filter('register_post_type_args', 'disable_new_posts_for_acf_cpt', 10, 2);
 
-
-
 // endregion
 
 new OCEANWP_Theme_Class();
