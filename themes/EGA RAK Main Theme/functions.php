@@ -1549,6 +1549,86 @@ function disable_new_posts_for_acf_cpt($args, $post_type) {
 }
 add_filter('register_post_type_args', 'disable_new_posts_for_acf_cpt', 10, 2);
 
+// Add the custom setting for ACF fields
+function add_who_can_edit_setting($field) {
+    acf_render_field_setting($field, array(
+        'label'         => __('Who Can Edit?'),
+        'instructions'  => __('Select which user roles can edit this field. Leave blank for everyone.'),
+        'type'          => 'radio',
+        'name'          => 'who_can_edit',
+        'choices'       => array(
+            'admins'   => __('Admins'),
+            'editors'  => __('Editors'),
+            'everyone' => __('Everyone'),
+        ),
+        'ui'            => 1, // Enable ACF UI
+        'allow_null'    => 0,
+        'layout'        => 'vertical', // Display radio buttons vertically
+    ));
+}
+add_action('acf/render_field_settings', 'add_who_can_edit_setting');
+
+// Convert the setting to a string if needed (in case it's an array)
+function convert_who_can_edit_to_string( $field ) {
+    if ( isset($field['who_can_edit']) && is_array($field['who_can_edit']) ) {
+        $field['who_can_edit'] = reset($field['who_can_edit']);
+    }
+    return $field;
+}
+add_filter('acf/load_field', 'convert_who_can_edit_to_string');
+
+// Restrict fields based on user roles
+function restrict_field_based_on_role($field) {
+    $current_user = wp_get_current_user();
+    $user_roles = (array) $current_user->roles;
+
+    // Debug log for current user roles
+    echo("Current user roles: " . implode(', ', $user_roles));
+
+    // Ensure 'who_can_edit' exists before checking it
+    
+
+    $allowed_roles = [];
+	echo("who can edit ".$field['who_can_edit']);
+    switch ($field['who_can_edit']) {
+        case 'administrator':
+            $allowed_roles = ['administrator'];
+			
+            break;
+        case 'editor':
+            $allowed_roles = ['editor', 'administrator'];
+            break;
+        default:
+            error_log("Unknown who_can_edit value: " . $field['who_can_edit']);
+            return $field; // Return the field without modifying it
+    }
+
+    // Debug log for allowed roles
+    echo("Allowed roles for this field: " . implode(', ', $allowed_roles));
+
+    // Only restrict the field if the user doesn't have the allowed role
+    if (!empty($allowed_roles) && !array_intersect($allowed_roles, $user_roles)) {
+        if (!isset($field['wrapper']['class'])) {
+            $field['wrapper']['class'] = '';
+        }
+        $field['wrapper']['class'] .= ' disabled-acf-field'; // Visually disable the field
+        echo("Field " . $field['name'] . " is restricted.");
+    }
+
+    return $field;
+}
+add_filter('acf/prepare_field', 'restrict_field_based_on_role');
+
+
+
+
+
+
+
+function disable_acf_fields_script() {
+    wp_enqueue_script('disable-acf-fields', get_template_directory_uri() . '/js/disable-acf-fields.js', array('jquery'), filemtime(get_template_directory() . '/js/disable-acf-fields.js'), true);
+}
+add_action('acf/input/admin_enqueue_scripts', 'disable_acf_fields_script');
 
 
 // endregion
