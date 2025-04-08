@@ -1557,8 +1557,8 @@ function add_who_can_edit_setting($field) {
         'type'          => 'radio',
         'name'          => 'who_can_edit',
         'choices'       => array(
-            'admins'   => __('Admins'),
-            'editors'  => __('Editors'),
+            'administrator'   => __('Admins'),
+            'editor'  => __('Editors'),
             'everyone' => __('Everyone'),
         ),
         'ui'            => 1, // Enable ACF UI
@@ -1581,30 +1581,19 @@ add_filter('acf/load_field', 'convert_who_can_edit_to_string');
 function restrict_field_based_on_role($field) {
     $current_user = wp_get_current_user();
     $user_roles = (array) $current_user->roles;
-
-    // Debug log for current user roles
-    echo("Current user roles: " . implode(', ', $user_roles));
-
-    // Ensure 'who_can_edit' exists before checking it
-    
-
     $allowed_roles = [];
-	echo("who can edit ".$field['who_can_edit']);
-    switch ($field['who_can_edit']) {
-        case 'administrator':
-            $allowed_roles = ['administrator'];
-			
-            break;
-        case 'editor':
-            $allowed_roles = ['editor', 'administrator'];
-            break;
-        default:
-            error_log("Unknown who_can_edit value: " . $field['who_can_edit']);
-            return $field; // Return the field without modifying it
-    }
-
-    // Debug log for allowed roles
-    echo("Allowed roles for this field: " . implode(', ', $allowed_roles));
+	if(isset($field['who_can_edit'])){
+		switch ($field['who_can_edit']) {
+			case 'administrator':
+				$allowed_roles = ['administrator'];
+				break;
+			case 'editor':
+				$allowed_roles = ['editor', 'administrator'];
+				break;
+			default:
+				return $field; // Return the field without modifying it
+		}
+	}
 
     // Only restrict the field if the user doesn't have the allowed role
     if (!empty($allowed_roles) && !array_intersect($allowed_roles, $user_roles)) {
@@ -1612,7 +1601,6 @@ function restrict_field_based_on_role($field) {
             $field['wrapper']['class'] = '';
         }
         $field['wrapper']['class'] .= ' disabled-acf-field'; // Visually disable the field
-        echo("Field " . $field['name'] . " is restricted.");
     }
 
     return $field;
