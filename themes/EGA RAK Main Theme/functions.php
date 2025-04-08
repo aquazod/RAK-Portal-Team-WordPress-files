@@ -1207,6 +1207,23 @@ function sticky_header_script() {
 // Hook the function into wp_enqueue_scripts action
 add_action('wp_enqueue_scripts', 'sticky_header_script');
 
+function enqueueTooltip() {
+    wp_enqueue_script('tooltip-js', get_template_directory_uri() . '/tooltip.js', array('jquery'), null, true);
+}
+add_action('wp_enqueue_scripts', 'enqueueTooltip');
+
+function register_dyn_tooltip_post_type() {
+    register_post_type('dynTooltip', [
+        'labels' => [
+            'name' => 'Dynamic Tooltips',
+            'singular_name' => 'Dynamic Tooltip',
+        ],
+        'public' => true,
+        'show_in_rest' => true,
+        'supports' => ['title'],
+    ]);
+}
+add_action('init', 'register_dyn_tooltip_post_type');
 
 // Assem Ali, 17th Oct 2024, Enqueuing favicon script to show favicon
 function favicon_script() {
