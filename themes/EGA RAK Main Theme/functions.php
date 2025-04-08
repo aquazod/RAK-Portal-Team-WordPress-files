@@ -1607,12 +1607,6 @@ function restrict_field_based_on_role($field) {
 }
 add_filter('acf/prepare_field', 'restrict_field_based_on_role');
 
-
-
-
-
-
-
 function disable_acf_fields_script() {
     wp_enqueue_script('disable-acf-fields', get_template_directory_uri() . '/js/disable-acf-fields.js', array('jquery'), filemtime(get_template_directory() . '/js/disable-acf-fields.js'), true);
 }
