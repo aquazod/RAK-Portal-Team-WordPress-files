@@ -13,7 +13,7 @@ function register_elementor_widgets($widgets_manager) {
     require_once(__DIR__ . '/widgets/class-hero-widget.php');
     require_once(__DIR__ . '/widgets/class-banner-widget.php');
     require_once(__DIR__ . '/widgets/class-flag-widget.php');
-    require_once(__DIR__ . '/class-infographic-widget.php');
+    require_once(__DIR__ . '/widgets/class-infographic-widget.php');
     // Fix: Ensure class name matches the actual class definition
     if (class_exists('Hero_Elementor_Widget')) {
         $widgets_manager->register(new \Hero_Elementor_Widget());
