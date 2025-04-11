@@ -15,33 +15,40 @@ function register_elementor_widgets($widgets_manager) {
     require_once(__DIR__ . '/widgets/class-flag-widget.php');
     require_once(__DIR__ . '/widgets/class-infographic-widget.php');
     require_once(__DIR__ . '/widgets/class-tooltip-widget.php');
+    
     // Fix: Ensure class name matches the actual class definition
     if (class_exists('Hero_Elementor_Widget')) {
         $widgets_manager->register(new \Hero_Elementor_Widget());
     } else {
         error_log('Hero_Elementor_Widget class not found.');
     }
+
     if (class_exists('Banner_Elementor_Widget')) {
         $widgets_manager->register(new \Banner_Elementor_Widget());
     } else {
         error_log('Banner_Elementor_Widget class not found.');
     }
+
     if (class_exists('Flag_Elementor_Widget')) {
         $widgets_manager->register(new \Flag_Elementor_Widget());
     } else {
         error_log('Flag_Elementor_Widget class not found.');
     }
+
     if (class_exists('Infographic_Elementor_Widget')) {
         $widgets_manager->register(new \Infographic_Elementor_Widget());
     } else {
         error_log('infographic_Elementor_Widget class not found.');
     }
+
     if (class_exists('Tooltip_Elementor_Widget')) {
         $widgets_manager->register(new \Tooltip_Elementor_Widget());
     } else {
         error_log('Tooltip_Elementor_Widget class not found.');
     }
+
 }
+add_action('elementor/widgets/register', 'register_elementor_widgets');
 
 // enqueue the styles for the widgets
 function enqueue_widget_styles_global() {
@@ -70,7 +77,3 @@ function enqueue_widget_styles_global() {
     );
 }
 add_action('wp_enqueue_scripts', 'enqueue_widget_styles_global');
-
-
-add_action('elementor/widgets/register', 'register_elementor_widgets');
-
