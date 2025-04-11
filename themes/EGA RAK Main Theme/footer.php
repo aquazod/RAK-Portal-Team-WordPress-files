@@ -28,6 +28,15 @@
 
 <?php do_action( 'ocean_after_wrap' ); ?>
 
+<div class="breadcrumb innerbg">
+	<div class="container">
+		<?php if ( function_exists( 'oceanwp_breadcrumb_trail' ) ) {
+					oceanwp_breadcrumb_trail();
+				}
+		?>
+	</div>
+</div>
+
 </div><!-- #outer-wrap -->
 
 <?php do_action( 'ocean_after_outer_wrap' ); ?>
@@ -77,7 +86,6 @@ if ( 'fullscreen' === oceanwp_mobile_menu_style() ) {
 	get_template_part( 'partials/mobile/mobile-fullscreen' );
 }
 ?>
-
 
 
 <?php wp_footer(); ?>
