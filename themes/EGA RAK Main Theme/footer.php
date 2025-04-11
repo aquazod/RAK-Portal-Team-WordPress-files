@@ -79,14 +79,6 @@ if ( 'fullscreen' === oceanwp_mobile_menu_style() ) {
 ?>
 
 
-<div class="breadcrumb innerbg">
-		<div class="container">
-			<?php if ( function_exists( 'oceanwp_breadcrumb_trail' ) ) {
-						oceanwp_breadcrumb_trail();
-					}
-			?>
-		</div>
-</div>
 
 <?php wp_footer(); ?>
 </body>

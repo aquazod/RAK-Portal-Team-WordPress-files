@@ -7,16 +7,6 @@
 
 get_header(); ?>
 
-<div id="homepage-content-wrap" class="container clr">
-    <div id="homepage-content" class="site-content clr">
-        <?php while ( have_posts() ) : the_post(); ?>
-            <?php get_template_part( 'partials/page/layout' ); ?>
-        <?php endwhile; ?>
-    </div>
-</div>
-<?php get_footer(); ?>
-<?php return; ?>
-
 <?php if ( is_front_page() ) : ?>
     <div id="homepage-content-wrap" class="container clr">
         <div id="homepage-content" class="site-content clr">

@@ -1628,12 +1628,6 @@ function disable_acf_fields_script() {
     wp_enqueue_script('disable-acf-fields', get_template_directory_uri() . '/js/disable-acf-fields.js', array('jquery'), filemtime(get_template_directory() . '/js/disable-acf-fields.js'), true);
 }
 add_action('acf/input/admin_enqueue_scripts', 'disable_acf_fields_script');
-
-function ega_enqueue_custom_fonts() {
-    wp_enqueue_style('ega-fonts', get_template_directory_uri() . '/css/font-file.css');
-}
-add_action('wp_enqueue_scripts', 'ega_enqueue_custom_fonts');
-
 // endregion
 
 new OCEANWP_Theme_Class();
