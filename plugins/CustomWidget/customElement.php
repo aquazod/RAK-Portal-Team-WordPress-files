@@ -15,6 +15,9 @@ function register_elementor_widgets($widgets_manager) {
     require_once(__DIR__ . '/widgets/class-flag-widget.php');
     require_once(__DIR__ . '/widgets/class-infographic-widget.php');
     require_once(__DIR__ . '/widgets/class-tooltip-widget.php');
+    require_once(__DIR__ . '/widgets/class-dynamic-image-toggle.php');
+    require_once(__DIR__ . '/widgets/test-banner-widget.php');
+    require_once(__DIR__ . '/widgets/all-controllers-widget.php');
 
     // Fix: Ensure class name matches the actual class definition
     if (class_exists('Hero_Elementor_Widget')) {
@@ -46,6 +49,10 @@ function register_elementor_widgets($widgets_manager) {
     } else {
         error_log('Tooltip_Elementor_Widget class not found.');
     }
+
+    $widgets_manager->register(new \My_Dynamic_Image_Toggle());
+    $widgets_manager->register(new \Banner_Gallery_Slider());
+    $widgets_manager->register(new \Elementor_All_Controls_Demo_Widget());
 }
 add_action('elementor/widgets/register', 'register_elementor_widgets');
 

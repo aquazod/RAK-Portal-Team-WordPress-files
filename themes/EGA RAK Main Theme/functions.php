@@ -1629,10 +1629,122 @@ function disable_acf_fields_script() {
 }
 add_action('acf/input/admin_enqueue_scripts', 'disable_acf_fields_script');
 
+// Stuff related to new custom widgets testing
+
+function my_custom_widget_shortcode($atts = []) {
+    $atts = shortcode_atts([
+        'title' => 'Hello from shortcode!',
+    ], $atts);
+
+    $elementor = \Elementor\Plugin::instance();
+
+    $widget_data = [
+        'id' => uniqid('my_widget_'),
+        'elType' => 'widget',
+        'widgetType' => 'my_dynamic_image_toggle', // Must match get_name()
+        'settings' => [
+            'title' => $atts['title'],
+        ],
+    ];
+
+    ob_start();
+    echo $elementor->frontend->get_builder_content_for_display([
+        'elements' => [ $widget_data ]
+    ]);
+    return ob_get_clean();
+}
+add_shortcode('my_dynamic_image_toggle_shortcode', 'my_custom_widget_shortcode');
+
+// Hook to add admin menu
+add_action('admin_menu', 'register_custom_widget_tracker_menu');
+
+function register_custom_widget_tracker_menu() {
+    add_menu_page(
+        'Custom Widget Tracker',            // Page title
+        'Widget Tracker',                   // Menu title
+        'manage_options',                   // Capability
+        'custom-widget-tracker',            // Menu slug
+        'render_custom_widget_tracker_page',// Callback function
+        'dashicons-search',                 // Icon
+        90                                  // Position
+    );
+}
+
+function render_custom_widget_tracker_page() {
+    echo '<div class="wrap"><h1>Custom Banner Slider Widget Tracker</h1>';
+
+    $widgets = get_all_custom_banner_slider_widgets();
+
+    if (empty($widgets)) {
+        echo '<p>No instances of <code>custom_banner_slider</code> found on the site.</p>';
+    } else {
+        echo '<table class="widefat fixed striped">';
+        echo '<thead><tr><th>Post Title</th><th>Post ID</th><th>Gallery Count</th><th>Edit Link</th></tr></thead>';
+        echo '<tbody>';
+        foreach ($widgets as $widget) {
+            $post_title = get_the_title($widget['post_id']);
+            $edit_link = get_edit_post_link($widget['post_id']);
+            // $slide_speed = esc_html($widget['settings']['slide_speed']);
+            $gallery_count = isset($widget['settings']['gallery']) ? count($widget['settings']['gallery']) : 0;
+			// <th>Slide Speed</th> <td>{$slide_speed} ms</td> 
+
+            echo "<tr>
+                <td>{$post_title}</td>
+                <td>{$widget['post_id']}</td>
+                
+                <td>{$gallery_count}</td>
+                <td><a href='{$edit_link}' class='button'>Edit Page</a></td>
+            </tr>";
+        }
+        echo '</tbody></table>';
+    }
+
+    echo '</div>';
+}
+
+function get_all_custom_banner_slider_widgets() {
+    global $wpdb;
+    $widgets = [];
+
+    $results = $wpdb->get_results("
+        SELECT post_id, meta_value 
+        FROM {$wpdb->postmeta}
+        WHERE meta_key = '_elementor_data'
+          AND meta_value LIKE '%\"widgetType\":\"banner_gallery_slider\"%'
+    ");
+
+    foreach ($results as $row) {
+        $data = json_decode($row->meta_value, true);
+        if (!$data) continue;
+
+        // Recursively look for the widget
+        $queue = $data;
+        while (!empty($queue)) {
+            $node = array_shift($queue);
+
+            if (isset($node['widgetType']) && $node['widgetType'] === 'banner_gallery_slider') {
+                $widgets[] = [
+                    'post_id' => $row->post_id,
+                    'settings' => $node['settings']
+                ];
+            }
+
+            if (!empty($node['elements'])) {
+                $queue = array_merge($queue, $node['elements']);
+            }
+        }
+    }
+
+    return $widgets;
+}
+
+// end of new custom widgets testing
+
 function ega_enqueue_custom_fonts() {
 	wp_enqueue_style('ega-fonts', get_template_directory_uri() . '/css/font-file.css');
 }
 add_action('wp_enqueue_scripts', 'ega_enqueue_custom_fonts');
+
 
 // endregion
 
